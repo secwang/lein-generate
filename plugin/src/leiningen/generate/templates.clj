@@ -46,4 +46,9 @@
   template variables."
   [render src dest data]
   (main/info "Creating" (render-text dest data))
-  (->files data [dest (render src data)]))
+  (let [path (render-text dest data)
+        file (io/file *cwd* path)
+        boolean (.exists file)]
+    (if-not boolean
+      (->files data [dest (render src data)])
+      (main/info "file already exists"))))
